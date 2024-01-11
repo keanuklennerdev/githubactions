@@ -1,0 +1,27 @@
+name: Deployment pipeline
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+
+      - name: Deploy to SFTP connection
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.USER }}
+          server: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          local_path: './path/*'
+          remote_path: '/path'
+          sftp_only: true
+          password: ${{ secrets.SFTP_PASSWORD }}
+
